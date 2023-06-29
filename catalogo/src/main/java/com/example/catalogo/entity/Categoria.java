@@ -13,6 +13,7 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
+    private String descripcion;
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
