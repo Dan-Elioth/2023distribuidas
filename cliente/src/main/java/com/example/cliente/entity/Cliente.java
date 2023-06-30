@@ -1,10 +1,10 @@
 package com.example.cliente.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Data
@@ -16,4 +16,21 @@ public class Cliente {
     private String dni;
     private String apellidoPaterno;
     private String apellidoMaterno;
+
+
+    @Column(name = "fecha_creacion")
+    private LocalDateTime fechaCreacion;
+
+    @Column(name = "fecha_actualizacion")
+    private LocalDateTime fechaActualizacion;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersistAndUpdate() {
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        if (fechaCreacion == null) {
+            fechaCreacion = now;
+        }
+        fechaActualizacion = now;
+    }
 }
