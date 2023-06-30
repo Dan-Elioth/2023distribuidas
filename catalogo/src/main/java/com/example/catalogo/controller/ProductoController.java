@@ -26,8 +26,10 @@ public class ProductoController {
 
     @GetMapping("/{id}")
 
-    public ResponseEntity<Producto> listById(@PathVariable(required = true) Integer id) {
-        return ResponseEntity.ok().body(productoService.listarPorId(id).get());
+    public Producto buscarPorId(@PathVariable(required = true) Integer id) {
+        Producto producto = productoService.listarPorId(id).get();
+        producto.setCategoria(producto.getCategoria());
+        return producto;
     }
     @PutMapping()
     public Producto actualizar(@RequestBody Producto producto){
