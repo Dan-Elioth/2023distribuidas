@@ -57,4 +57,15 @@ public class AuthUserServiceImpl implements AuthUserService {
 
         return new TokenDto(token);
     }
+
+    @Override
+    public void logout(String token) {
+        if (jwtProvider.validate(token)) {
+            jwtProvider.addToInvalidTokens(token);
+            System.out.println("Token invalidado y agregado a la lista de tokens inválidos: " + token);
+        } else {
+            System.out.println("Token inválido: " + token);
+        }
+    }
+
 }

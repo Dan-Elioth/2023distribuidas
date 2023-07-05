@@ -11,4 +11,7 @@ public interface AuthUserService {
 
     public TokenDto validate(String token);
 
+    public void logout(String token);
+
+
 }

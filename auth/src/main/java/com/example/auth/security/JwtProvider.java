@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 
 
 import javax.annotation.PostConstruct;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class JwtProvider {
     @Value("${jwt.secret}")
     private String secret;
+    private Set<String> invalidTokens;
 
     @PostConstruct
     protected void init() {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        invalidTokens = ConcurrentHashMap.newKeySet();
     }
 
     public String createToken(AuthUser authUser) {
@@ -41,16 +41,20 @@ public class JwtProvider {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public String getUserNameFromToken(String token){
+    public String getUserNameFromToken(String token) {
         try {
             return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-        }catch (Exception e) {
+        } catch (Exception e) {
             return "bad token";
         }
+    }
+
+    public void addToInvalidTokens(String token) {
+        invalidTokens.add(token);
     }
 }

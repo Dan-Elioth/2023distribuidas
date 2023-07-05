@@ -37,4 +37,11 @@ public class AuthUserController {
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(authUser);
     }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
+        authUserService.logout(token);
+        return ResponseEntity.ok().build();
+    }
+
 }
